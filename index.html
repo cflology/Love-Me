@@ -402,3 +402,299 @@
     </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with Visitor Counter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            min-height: 95vh;
+        }
+        
+        .visitor-counter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .visitor-counter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .counter-icon {
+            font-size: 1.5rem;
+        }
+        
+        .counter-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .counter-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4); }
+            50% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.8); }
+            100% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4); }
+        }
+        
+        .new-visitor-notification {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background-color: #4cd964;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 99;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 80px 20px 40px;
+            background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 0 30px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h2 {
+            color: #4776E6;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .card p {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .features {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #4776E6;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="visitor-counter">
+            <div class="counter-icon">👁️</div>
+            <div>
+                <div class="counter-value" id="visitorCount">0</div>
+                <div class="counter-label">Visitors</div>
+            </div>
+        </div>
+        
+        <div class="new-visitor-notification" id="newVisitorNotification">
+            New visitor just arrived!
+        </div>
+        
+        <div class="header">
+            <h1>Welcome to Our Website</h1>
+            <p>This page demonstrates a real-time visitor counter that updates automatically when new visitors arrive.</p>
+        </div>
+        
+        <div class="content">
+            <div class="card">
+                <h2>About Visitor Tracking</h2>
+                <p>This visitor counter simulates real-time tracking of website visitors. In a real application, this would be connected to a backend server or analytics service.</p>
+                <p>The counter updates automatically and shows a notification when a new visitor arrives. The design is responsive and works on all device sizes.</p>
+            </div>
+            
+            <div class="card">
+                <h2>How It Works</h2>
+                <p>The counter uses JavaScript to simulate visitor tracking. In a production environment, this would typically involve:</p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.6;">
+                    <li>Backend API to track unique visitors</li>
+                    <li>Database to store visitor information</li>
+                    <li>WebSockets for real-time updates</li>
+                </ul>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Updates</h3>
+                    <p>Watch the counter increase as new visitors arrive on the site</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Beautiful Design</h3>
+                    <p>Visually appealing counter with smooth animations</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h3>Fully Responsive</h3>
+                    <p>Works perfectly on desktop, tablet, and mobile devices</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Visitor Counter Demo &copy; 2023 | Refresh the page to see the counter increase</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize visitor count
+        let visitorCount = parseInt(localStorage.getItem('visitorCount')) || 125;
+        document.getElementById('visitorCount').textContent = visitorCount;
+        
+        // Function to simulate a new visitor
+        function addNewVisitor() {
+            visitorCount++;
+            document.getElementById('visitorCount').textContent = visitorCount;
+            localStorage.setItem('visitorCount', visitorCount);
+            
+            // Show notification
+            const notification = document.getElementById('newVisitorNotification');
+            notification.style.opacity = '1';
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+            }, 3000);
+        }
+        
+        // Add a new visitor when the page loads (simulating a new visit)
+        window.addEventListener('load', () => {
+            // Wait a moment before showing the first notification
+            setTimeout(() => {
+                addNewVisitor();
+            }, 2000);
+        });
+        
+        // Simulate random visitors (for demo purposes)
+        setInterval(() => {
+            // 30% chance of a new visitor every 5-15 seconds
+            if (Math.random() < 0.3) {
+                setTimeout(() => {
+                    addNewVisitor();
+                }, Math.random() * 1000 + 500); // Random delay between 0.5-1.5 seconds
+            }
+        }, 5000);
+        
+        // Also add a visitor when the user clicks the counter
+        document.querySelector('.visitor-counter').addEventListener('click', () => {
+            addNewVisitor();
+        });
+    </script>
+</body>
+</html>
+
